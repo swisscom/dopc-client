@@ -5,13 +5,13 @@ require 'rest-client'
 require 'json'
 
 class CLI < Thor
-  class_option :url, :default => 'http://localhost:3000'
-  class_option :version, :default => '1'
+  class_option :url, :default => 'http://localhost:3000', :aliases => :u
+  class_option :version, :default => '1', :aliases => :v
   desc 'ping', 'Ping the API'
   def ping()
     r = RestClient.get "#{options[:url]}/api/v#{options[:version]}/ping", {accept: :json}
     j = JSON.parse(r.body)
-    puts "#{r.code}: #{j['text']}"
+    puts j['text']
   end
 end
 
