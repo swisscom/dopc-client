@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'rest-client'
+require 'json'
+
+$DOPC_API_VERSION = '1'
+
+class CLI < Thor
+  desc "Ping the API"
+  def ping()
+    r = RestClient.get "http://localhost:3000/api/v#{$DOPC_API_VERSION}/ping", {accept: :json}
+    j = JSON.parse(r.body)
+    puts "#{r.code}: #{j['text']}"
+  end
+end
+
+CLI.start(ARGV)
