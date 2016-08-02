@@ -4,12 +4,12 @@ require 'thor'
 require 'rest-client'
 require 'json'
 
-$DOPC_API_VERSION = '1'
-
 class CLI < Thor
-  desc "Ping the API"
+  class_option :url, :default => 'http://localhost:3000'
+  class_option :version, :default => '1'
+  desc 'ping', 'Ping the API'
   def ping()
-    r = RestClient.get "http://localhost:3000/api/v#{$DOPC_API_VERSION}/ping", {accept: :json}
+    r = RestClient.get "#{options[:url]}/api/v#{options[:version]}/ping", {accept: :json}
     j = JSON.parse(r.body)
     puts "#{r.code}: #{j['text']}"
   end
