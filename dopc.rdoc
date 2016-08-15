@@ -1,0 +1,44 @@
+== dopc - CLI client for DOPc
+
+v0.0.1
+
+=== Global Options
+=== -a|--api api
+
+API version to use
+
+[Default Value] 1
+
+
+=== -u|--url url
+
+URL where DOPc service runs
+
+[Default Value] http://localhost:3000
+
+
+=== --help
+Show this message
+
+
+
+=== --version
+Display the program version
+
+
+
+=== Commands
+==== Command: <tt>help  command</tt>
+Shows a list of commands or help for one command
+
+Gets help for the application or its commands. Can also list the commands in a way helpful to creating a bash-style completion function
+===== Options
+===== -c
+List commands one per line, to assist with shell completion
+
+
+
+==== Command: <tt>ping </tt>
+Ping the API
+
+

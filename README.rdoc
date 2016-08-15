@@ -1,0 +1,6 @@
+= dopc
+
+DOPc client is a CLI for the DOPc REST API.
+
+:include:dopc.rdoc
+

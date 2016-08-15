@@ -1,18 +1,35 @@
 #!/usr/bin/env ruby
 
-require 'thor'
+require 'gli'
 require 'rest-client'
 require 'json'
 
-class CLI < Thor
-  class_option :url, :default => 'http://localhost:3000', :aliases => :u
-  class_option :version, :default => '1', :aliases => :v
-  desc 'ping', 'Ping the API'
-  def ping()
-    r = RestClient.get "#{options[:url]}/api/v#{options[:version]}/ping", {accept: :json}
+include GLI::App
+
+program_desc 'CLI client for DOPc'
+
+version Dopc::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+desc 'URL where DOPc service runs'
+default_value 'http://localhost:3000'
+arg_name 'url'
+flag [:u,:url]
+
+desc 'API version to use'
+default_value '1'
+arg_name 'api'
+flag [:a,:api]
+
+desc 'Ping the API'
+command :ping do |c|
+  c.action do |global_options,options,args|
+    r = RestClient.get "#{global_options[:url]}/api/v#{global_options[:api]}/ping", {accept: :json}
     j = JSON.parse(r.body)
     puts j['text']
   end
 end
 
-CLI.start(ARGV)
+exit run(ARGV)
