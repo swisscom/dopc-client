@@ -2,8 +2,6 @@ require 'rake/clean'
 require 'rubygems'
 require 'rubygems/package_task'
 require 'rdoc/task'
-require 'cucumber'
-require 'cucumber/rake/task'
 
 Rake::RDocTask.new do |rd|
   rd.main = "README.rdoc"
