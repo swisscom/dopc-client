@@ -19,6 +19,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('test-unit')
+  s.add_development_dependency('byebug')
   s.add_runtime_dependency('gli','~> 2')
   s.add_runtime_dependency('rest-client','~> 2')
   s.add_runtime_dependency('json','~> 1')

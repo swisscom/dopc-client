@@ -42,3 +42,20 @@ List commands one per line, to assist with shell completion
 Ping the API
 
 
+==== Command: <tt>plan </tt>
+Manage plans
+
+
+===== Commands
+====== Command: <tt>add  <file></tt>
+Add a plan
+
+
+====== Command: <tt>del  <name></tt>
+Delete a plan
+
+
+====== Command: <tt>list </tt>
+List all plans
+
+

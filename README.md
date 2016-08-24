@@ -10,6 +10,7 @@ DOPc client is a CLI for the DOPc REST API.
 ## Todo
 
 * Testing: write mock for REST service?
+* Authentication
 
 ## Authors
 
