@@ -1,1 +1,2 @@
-require 'dopc/version.rb'
+require 'dopc/version'
+require 'dopc/apiclient'

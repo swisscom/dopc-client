@@ -1,24 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'gli'
-require 'rest-client'
-require 'json'
 require 'base64'
+require 'dopc'
 
 include GLI::App
-
-def request(options, method, path, payload = {})
-  url = "#{options[:url]}/api/v#{options[:api]}/#{path}"
-  headers = {accept: :json, content_type: :json}
-  begin
-    response = RestClient::Request.execute(method: method, url: url, headers: headers, payload: payload.to_json)
-    return response.body.empty? ? {} : JSON.parse(response.body)
-  rescue RestClient::Exception => e
-    body = e.response.body
-    error = body.empty? ? 'Unknown' : JSON.parse(body)['error']
-    exit_now!(error, 1)
-  end
-end
 
 program_desc 'CLI client for DOPc'
 
@@ -40,7 +26,8 @@ flag [:a,:api]
 desc 'Ping the API'
 command :ping do |c|
   c.action do |global_options,options,args|
-    response = request(global_options, :get, 'ping')
+    client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
+    response = client.request(:get, 'ping')
     puts response['pong']
   end
 end
@@ -50,7 +37,8 @@ command :plan do |c|
   c.desc 'List all plans'
   c.command :list do |sc|
     sc.action do |global_options,options,args|
-      response = request(global_options, :get, 'plans')
+      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
+      response = client.request(:get, 'plans')
       response['plans'].each { |plan| puts plan['name'] }
     end
   end
@@ -62,7 +50,8 @@ command :plan do |c|
       file = args[0]
       content = Base64.encode64(File.read(file))
       payload = {content: content}
-      response = request(global_options, :post, 'plans', payload)
+      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
+      response = request.client(:post, 'plans', payload)
       puts response['name']
     end
   end
@@ -72,7 +61,8 @@ command :plan do |c|
     sc.action do |global_options,options,args|
       help_now!('Specify plan to delete') if args.empty?
       name = args[0]
-      response = request(global_options, :delete, "plans/#{name}")
+      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
+      response = client.request(:delete, "plans/#{name}")
       puts response['name']
     end
   end
