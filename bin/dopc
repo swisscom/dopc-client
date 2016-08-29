@@ -23,6 +23,14 @@ default_value '1'
 arg_name 'api'
 flag [:a,:api]
 
+desc 'Show debug output'
+switch [:d,:debug]
+
+pre do |global_options,command,options,args|
+  ENV['GLI_DEBUG'] = 'true' if global_options[:debug]
+  true
+end
+
 desc 'Ping the API'
 command :ping do |c|
   c.action do |global_options,options,args|
