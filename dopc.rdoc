@@ -1,4 +1,4 @@
-== dopc - CLI client for DOPc
+== dopc - CLI client for DOPc. For general errors the client will exit with 1.
 
 v0.0.1
 
@@ -49,6 +49,10 @@ Manage plans
 ===== Commands
 ====== Command: <tt>add  <file></tt>
 Add a plan
+
+
+====== Command: <tt>check  <name></tt>
+Check a plan. Exits with 64 if plan is invalid.
 
 
 ====== Command: <tt>del  <name></tt>
