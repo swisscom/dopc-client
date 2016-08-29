@@ -17,6 +17,11 @@ URL where DOPc service runs
 [Default Value] http://localhost:3000
 
 
+=== -d|--[no-]debug
+Show debug output
+
+
+
 === --help
 Show this message
 
