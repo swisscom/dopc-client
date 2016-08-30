@@ -68,3 +68,7 @@ Delete a plan
 List all plans
 
 
+====== Command: <tt>run  <name></tt>
+Run a plan.
+
+

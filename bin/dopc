@@ -93,6 +93,15 @@ command :plan do |c|
       exit_now!("Plan is invalid", 65) unless response['valid']
     end
   end
+  c.arg_name '<name>'
+  c.desc 'Run a plan.'
+  c.command :run do |sc|
+    sc.action do |global_options,options,args|
+      help_now!('Specify plan to delete') if args.empty?
+      name = args[0]
+      response = api(global_options, :post, "plans/#{name}/run")
+    end
+  end
 end
 
 exit run(ARGV)
