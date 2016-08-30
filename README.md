@@ -2,6 +2,8 @@
 
 DOPc client is a CLI for the DOPc REST API.
 
+See rdoc for usage documentation.
+
 ## Contributing
 
 * Don't forget to generate rdoc file after changes with `bundle exec dopc
@@ -11,11 +13,10 @@ DOPc client is a CLI for the DOPc REST API.
 
 * Testing: write mock for REST service?
 * Authentication
-* `exit_now!()` should not be in `lib/dopc/apiclient.rb`
 
 ## Troubleshooting
 
-* To debug set `GLI_DEBUG=true` in your environment.
+* To debug use the `-d` flag.
 
 ## Authors
 

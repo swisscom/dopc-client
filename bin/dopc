@@ -2,6 +2,7 @@
 
 require 'gli'
 require 'base64'
+require 'rest-client'
 require 'dopc'
 
 include GLI::App
@@ -26,6 +27,18 @@ flag [:a,:api]
 desc 'Show debug output'
 switch [:d,:debug]
 
+def api(options, method, path, payload = {})
+  client = Dopc::ApiClient.new(options[:url], options[:api])
+  begin
+    body = client.request(method, path, payload)
+    return body.empty? ? {} : JSON.parse(body)
+  rescue RestClient::Exception => e
+    body = e.response.body
+    error = body.empty? ? 'Unknown' : JSON.parse(body)['error']
+    exit_now!(error, 1)
+  end
+end
+
 pre do |global_options,command,options,args|
   ENV['GLI_DEBUG'] = 'true' if global_options[:debug]
   true
@@ -34,8 +47,7 @@ end
 desc 'Ping the API'
 command :ping do |c|
   c.action do |global_options,options,args|
-    client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
-    response = client.request(:get, 'ping')
+    response = api(global_options, :get, 'ping')
     puts response['pong']
   end
 end
@@ -45,8 +57,7 @@ command :plan do |c|
   c.desc 'List all plans'
   c.command :list do |sc|
     sc.action do |global_options,options,args|
-      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
-      response = client.request(:get, 'plans')
+      response = api(global_options, :get, 'plans')
       response['plans'].each { |plan| puts plan['name'] }
     end
   end
@@ -58,8 +69,7 @@ command :plan do |c|
       file = args[0]
       content = Base64.encode64(File.read(file))
       payload = {content: content}
-      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
-      response = client.request(:post, 'plans', payload)
+      response = api(global_options, :post, 'plans', payload)
       puts response['name']
     end
   end
@@ -69,20 +79,18 @@ command :plan do |c|
     sc.action do |global_options,options,args|
       help_now!('Specify plan to delete') if args.empty?
       name = args[0]
-      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
-      response = client.request(:delete, "plans/#{name}")
+      response = api(global_options, :delete, "plans/#{name}")
       puts response['name']
     end
   end
   c.arg_name '<name>'
-  c.desc 'Check a plan. Exits with 64 if plan is invalid.'
+  c.desc 'Check a plan. Exits with 65 if plan is invalid.'
   c.command :check do |sc|
     sc.action do |global_options,options,args|
       help_now!('Specify plan to delete') if args.empty?
       name = args[0]
-      client = Dopc::ApiClient.new(global_options[:url], global_options[:api])
-      response = client.request(:get, "plans/#{name}/check")
-      exit_now!("Plan is invalid", 64) unless response['valid']
+      response = api(global_options, :get, "plans/#{name}/check")
+      exit_now!("Plan is invalid", 65) unless response['valid']
     end
   end
 end

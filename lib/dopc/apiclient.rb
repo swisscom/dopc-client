@@ -19,11 +19,7 @@ module Dopc
 
     def request(method, path, payload = {})
       response = RestClient::Request.execute(method: method, url: url(path), headers: headers, payload: payload.to_json)
-      return response.body.empty? ? {} : JSON.parse(response.body)
-    rescue RestClient::Exception => e
-      body = e.response.body
-      error = body.empty? ? 'Unknown' : JSON.parse(body)['error']
-      exit_now!(error, 1)
+      return response.body
     end
 
   end

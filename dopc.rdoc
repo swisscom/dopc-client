@@ -57,7 +57,7 @@ Add a plan
 
 
 ====== Command: <tt>check  <name></tt>
-Check a plan. Exits with 64 if plan is invalid.
+Check a plan. Exits with 65 if plan is invalid.
 
 
 ====== Command: <tt>del  <name></tt>
