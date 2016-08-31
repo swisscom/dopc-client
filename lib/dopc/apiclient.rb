@@ -14,11 +14,11 @@ module Dopc
     end
 
     def headers(headers = {})
-      {accept: :json, content_type: :json}.merge headers
+      {accept: :json}.merge headers
     end
 
-    def request(method, path, payload = {})
-      response = RestClient::Request.execute(method: method, url: url(path), headers: headers, payload: payload.to_json)
+    def request(method, path, payload = nil)
+      response = RestClient::Request.execute(method: method, url: url(path), headers: headers(payload ? {content_type: :json} : {}), payload: (payload ? payload.to_json : nil))
       return response.body
     end
 

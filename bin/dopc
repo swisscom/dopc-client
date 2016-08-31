@@ -27,7 +27,7 @@ flag [:a,:api]
 desc 'Show debug output'
 switch [:d,:debug]
 
-def api(options, method, path, payload = {})
+def api(options, method, path, payload = nil)
   client = Dopc::ApiClient.new(options[:url], options[:api])
   begin
     body = client.request(method, path, payload)
