@@ -1,4 +1,4 @@
-== dopc - CLI client for DOPc. For general errors the client will exit with 1.
+== dopc - CLI client for DOPc. For general errors the client will exit with 1. For an invalid plan file it exits with 65.
 
 v0.0.1
 
@@ -52,15 +52,15 @@ Manage plans
 
 
 ===== Commands
-====== Command: <tt>add  <file></tt>
+====== Command: <tt>add  file</tt>
 Add a plan
 
 
-====== Command: <tt>check  <name></tt>
-Check a plan. Exits with 65 if plan is invalid.
+====== Command: <tt>check  name</tt>
+Check a plan
 
 
-====== Command: <tt>del  <name></tt>
+====== Command: <tt>del  name</tt>
 Delete a plan
 
 
@@ -68,7 +68,15 @@ Delete a plan
 List all plans
 
 
-====== Command: <tt>run  <name></tt>
-Run a plan.
+====== Command: <tt>run  name</tt>
+Run a plan
+
+
+======= Options
+======= -s|--stepset stepset
+
+Run specific stepset from the plan, use default stepset if not specified
+
+[Default Value] None
 
 

@@ -7,7 +7,7 @@ require 'dopc'
 
 include GLI::App
 
-program_desc 'CLI client for DOPc. For general errors the client will exit with 1.'
+program_desc 'CLI client for DOPc. For general errors the client will exit with 1. For an invalid plan file it exits with 65.'
 
 version Dopc::VERSION
 
@@ -17,15 +17,15 @@ arguments :strict
 desc 'URL where DOPc service runs'
 default_value 'http://localhost:3000'
 arg_name 'url'
-flag [:u,:url]
+flag [:u, :url]
 
 desc 'API version to use'
 default_value '1'
 arg_name 'api'
-flag [:a,:api]
+flag [:a, :api]
 
 desc 'Show debug output'
-switch [:d,:debug]
+switch [:d, :debug]
 
 def api(options, method, path, payload = nil)
   client = Dopc::ApiClient.new(options[:url], options[:api])
@@ -61,7 +61,7 @@ command :plan do |c|
       response['plans'].each { |plan| puts plan['name'] }
     end
   end
-  c.arg_name '<file>'
+  c.arg_name 'file'
   c.desc 'Add a plan'
   c.command :add do |sc|
     sc.action do |global_options,options,args|
@@ -73,7 +73,7 @@ command :plan do |c|
       puts response['name']
     end
   end
-  c.arg_name '<name>'
+  c.arg_name 'name'
   c.desc 'Delete a plan'
   c.command :del do |sc|
     sc.action do |global_options,options,args|
@@ -83,8 +83,8 @@ command :plan do |c|
       puts response['name']
     end
   end
-  c.arg_name '<name>'
-  c.desc 'Check a plan. Exits with 65 if plan is invalid.'
+  c.arg_name 'name'
+  c.desc 'Check a plan'
   c.command :check do |sc|
     sc.action do |global_options,options,args|
       help_now!('Specify plan to delete') if args.empty?
@@ -93,13 +93,17 @@ command :plan do |c|
       exit_now!("Plan is invalid", 65) unless response['valid']
     end
   end
-  c.arg_name '<name>'
-  c.desc 'Run a plan.'
+  c.arg_name 'name'
+  c.desc 'Run a plan'
   c.command :run do |sc|
+    sc.desc 'Run specific stepset from the plan, use default stepset if not specified'
+    sc.arg_name 'stepset', :optional
+    sc.flag [:s, :stepset]
     sc.action do |global_options,options,args|
-      help_now!('Specify plan to delete') if args.empty?
+      help_now!('Specify plan to run') if args.empty?
       name = args[0]
-      response = api(global_options, :post, "plans/#{name}/run")
+      stepset = options[:stepset]
+      response = api(global_options, :post, "plans/#{name}/run", stepset ? {stepset: stepset} : nil)
     end
   end
 end
