@@ -70,7 +70,7 @@ command :plan do |c|
       content = Base64.encode64(File.read(file))
       payload = {content: content}
       response = api(global_options, :post, 'plans', payload)
-      puts response['name']
+      puts "Added plan: #{response['name']}"
     end
   end
   c.arg_name 'name'
@@ -80,7 +80,7 @@ command :plan do |c|
       help_now!('Specify plan to delete') if args.empty?
       name = args[0]
       response = api(global_options, :delete, "plans/#{name}")
-      puts response['name']
+      puts "Deleted plan: #{response['name']}"
     end
   end
   c.arg_name 'name'
@@ -104,6 +104,7 @@ command :plan do |c|
       name = args[0]
       stepset = options[:stepset]
       response = api(global_options, :post, "plans/#{name}/run", stepset ? {stepset: stepset} : nil)
+      puts "Started run with id: #{response['id']}"
     end
   end
 end
