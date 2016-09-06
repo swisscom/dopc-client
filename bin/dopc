@@ -61,6 +61,17 @@ command :plan do |c|
       response['plans'].each { |plan| puts plan['name'] }
     end
   end
+  c.arg_name 'name'
+  c.desc 'Get a plan'
+  c.command :get do |sc|
+    sc.action do |global_options,options,args|
+      help_now!('Specify plan to retrieve') if args.empty?
+      name = args[0]
+      response = api(global_options, :get, "plans/#{name}")
+      content = Base64.decode64(response['content'])
+      puts content
+    end
+  end
   c.arg_name 'file'
   c.desc 'Add a plan'
   c.command :add do |sc|

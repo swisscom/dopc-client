@@ -64,6 +64,10 @@ Check a plan
 Delete a plan
 
 
+====== Command: <tt>get  name</tt>
+Get a plan
+
+
 ====== Command: <tt>list </tt>
 List all plans
 
