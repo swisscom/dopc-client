@@ -13,6 +13,7 @@ See rdoc for usage documentation.
 
 * Testing: write mock for REST service?
 * Authentication
+* Show error message for 500 API errors
 
 ## Troubleshooting
 

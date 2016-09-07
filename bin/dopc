@@ -84,6 +84,22 @@ command :plan do |c|
       puts "Added plan: #{response['name']}"
     end
   end
+  c.arg_name 'file'
+  c.desc 'Update a plan'
+  c.command :update do |sc|
+    sc.desc 'Plan file to update from'
+    sc.arg_name 'file'
+    sc.flag [:f, :file]
+    sc.action do |global_options,options,args|
+      help_now!('Specify plan to update') if args.empty?
+      plan = args[0]
+      file = options[:file]
+      content = Base64.encode64(File.read(file))
+      payload = {content: content}
+      response = api(global_options, :put, "plans/#{plan}", payload)
+      puts "Updated plan: #{response['name']}"
+    end
+  end
   c.arg_name 'name'
   c.desc 'Delete a plan'
   c.command :del do |sc|

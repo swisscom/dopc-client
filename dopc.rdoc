@@ -84,3 +84,15 @@ Run specific stepset from the plan, use default stepset if not specified
 [Default Value] None
 
 
+====== Command: <tt>update  file</tt>
+Update a plan
+
+
+======= Options
+======= -f|--file file
+
+Plan file to update from
+
+[Default Value] None
+
+
