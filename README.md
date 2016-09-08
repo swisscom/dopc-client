@@ -11,7 +11,7 @@ See rdoc for usage documentation.
 
 ## Todo
 
-* Testing: write mock for REST service?
+* Testing: how to test GLI apps?
 * Authentication
 * Show error message for 500 API errors
 
