@@ -43,25 +43,7 @@ List all executions
 
 
 ====== Command: <tt>new </tt>
-Execute a plan (deploy with DOPv and run with DOPi)
-
-
-======= Options
-======= -s|--stepset arg
-
-Stepset to run instead of the default
-
-[Default Value] None
-
-
-======= --[no-]dopi
-Enable/disable running plan with DOPi
-
-
-
-======= --[no-]dopv
-Enable/disable deploying plan with DOPv
-
+Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.
 
 
 ==== Command: <tt>help  command</tt>
@@ -83,19 +65,19 @@ Manage plans
 
 
 ===== Commands
-====== Command: <tt>add  file</tt>
-Add a plan
+====== Command: <tt>add </tt>
+Add a plan from file
 
 
-====== Command: <tt>check  name</tt>
+====== Command: <tt>check </tt>
 Check a plan
 
 
-====== Command: <tt>del  name</tt>
+====== Command: <tt>del </tt>
 Delete a plan
 
 
-====== Command: <tt>get  name</tt>
+====== Command: <tt>get </tt>
 Get a plan
 
 
@@ -103,15 +85,7 @@ Get a plan
 List all plans
 
 
-====== Command: <tt>update  file</tt>
-Update a plan
-
-
-======= Options
-======= -f|--file file
-
-Plan file to update from
-
-[Default Value] None
+====== Command: <tt>update </tt>
+Update a plan from a file
 
 

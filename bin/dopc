@@ -61,62 +61,60 @@ command :plan do |c|
       response['plans'].each { |plan| puts plan['name'] }
     end
   end
-  c.arg_name 'name'
+  c.arg '<plan_name>'
   c.desc 'Get a plan'
   c.command :get do |sc|
     sc.action do |global_options, options, args|
-      help_now!('Specify plan to retrieve') if args.empty?
-      name = args[0]
-      response = api(global_options, :get, "plans/#{name}")
+      plan = args[0]
+      help_now!('Specify plan to retrieve') unless plan
+      response = api(global_options, :get, "plans/#{plan}")
       content = Base64.decode64(response['content'])
       puts content
     end
   end
-  c.arg_name 'file'
-  c.desc 'Add a plan'
+  c.arg '<file>'
+  c.desc 'Add a plan from file'
   c.command :add do |sc|
     sc.action do |global_options, options, args|
-      help_now!('Specify plan file to add') if args.empty?
       file = args[0]
+      help_now!('Specify plan file to add') unless file
       content = Base64.encode64(File.read(file))
       payload = {content: content}
       response = api(global_options, :post, 'plans', payload)
       puts "Added plan: #{response['name']}"
     end
   end
-  c.arg_name 'file'
-  c.desc 'Update a plan'
+  c.arg '<plan_name> <file>', :multiple
+  c.desc 'Update a plan from a file'
   c.command :update do |sc|
-    sc.desc 'Plan file to update from'
-    sc.arg_name 'file'
-    sc.flag [:f, :file]
     sc.action do |global_options, options, args|
-      help_now!('Specify plan to update') if args.empty?
       plan = args[0]
-      file = options[:file]
+      file = args[1]
+      help_now!('Specify plan to update') unless plan
+      help_now!('Specify file to update from') unless file
       content = Base64.encode64(File.read(file))
       payload = {content: content}
       response = api(global_options, :put, "plans/#{plan}", payload)
       puts "Updated plan: #{response['name']}"
     end
   end
-  c.arg_name 'name'
+  c.arg '<plan_name>'
   c.desc 'Delete a plan'
   c.command :del do |sc|
     sc.action do |global_options, options, args|
-      help_now!('Specify plan to delete') if args.empty?
-      name = args[0]
-      response = api(global_options, :delete, "plans/#{name}")
+      plan = args[0]
+      help_now!('Specify plan to delete') unless plan
+      response = api(global_options, :delete, "plans/#{plan}")
       puts "Deleted plan: #{response['name']}"
     end
   end
-  c.arg_name 'name'
+  c.arg '<plan_name>'
   c.desc 'Check a plan'
   c.command :check do |sc|
     sc.action do |global_options, options, args|
-      help_now!('Specify plan to delete') if args.empty?
-      name = args[0]
-      response = api(global_options, :get, "plans/#{name}/check")
+      plan = args[0]
+      help_now!('Specify plan to delete') unless plan
+      response = api(global_options, :get, "plans/#{plan}/check")
       exit_now!("Plan is invalid", 65) unless response['valid']
     end
   end
@@ -128,21 +126,20 @@ command :exec do |c|
   c.command :list do |sc|
     sc.action do |global_options, options, args|
       response = api(global_options, :get, 'executions')
-      response['executions'].each { |exec| puts "#{exec['id']}, #{exec['plan']}, #{exec['status']}" }
+      response['executions'].each { |exec| puts "#{exec['id']}  #{exec['plan']}  #{exec['task']}  #{exec['stepset']}  #{exec['status']}  #{exec['log']}" }
     end
   end
-  c.arg :name
-  c.desc 'Execute a plan (deploy with DOPv and run with DOPi)'
+  c.arg '<plan_name> <task_name> [<stepset>]', :multiple
+  c.desc 'Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.'
   c.command :new do |sc|
-    sc.switch :dopi, desc: 'Enable/disable running plan with DOPi', default_value: true
-    sc.switch :dopv, desc: 'Enable/disable deploying plan with DOPv', default_value: true
-    sc.flag [:s, :stepset], desc: 'Stepset to run instead of the default'
     sc.action do |global_options, options, args|
-      help_now!('Specify plan to execute') if args.empty?
       name = args[0]
-      stepset = options[:stepset]
-      payload = {plan: name, dopi: options[:dopi], dopv: options[:dopv]}
-      stepset ? payload.merge({stepset: stepset}) :
+      task = args[1]
+      stepset = args[2]
+      help_now!('Specify plan to execute') unless name
+      help_now!('Specify task to execute') unless task
+      payload = {plan: name, task: task}
+      stepset ? payload.merge!({stepset: stepset}) :
       response = api(global_options, :post, "executions", payload)
       puts "Started execution with id: #{response['id']}"
     end
