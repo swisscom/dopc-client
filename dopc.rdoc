@@ -38,6 +38,10 @@ Manage plan executions
 
 
 ===== Commands
+====== Command: <tt>get </tt>
+Get an executions
+
+
 ====== Command: <tt>list </tt>
 List all executions
 

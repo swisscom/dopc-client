@@ -129,6 +129,16 @@ command :exec do |c|
       response['executions'].each { |exec| puts "#{exec['id']}  #{exec['plan']}  #{exec['task']}  #{exec['stepset']}  #{exec['status']}  #{exec['log']}" }
     end
   end
+  c.arg '<execution_id>'
+  c.desc 'Get an executions'
+  c.command :get do |sc|
+    sc.action do |global_options, options, args|
+      execution = args[0]
+      help_now!('Specify an execution to get') unless execution
+      response = api(global_options, :get, "executions/#{execution}")
+      puts "#{response['id']}  #{response['plan']}  #{response['task']}  #{response['stepset']}  #{response['status']}  #{response['log']}"
+    end
+  end
   c.arg '<plan_name> <task_name> [<stepset>]', :multiple
   c.desc 'Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.'
   c.command :new do |sc|
