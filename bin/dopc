@@ -151,7 +151,7 @@ command :exec do |c|
       payload = {plan: name, task: task}
       stepset ? payload.merge!({stepset: stepset}) :
       response = api(global_options, :post, "executions", payload)
-      puts "Started execution with id: #{response['id']}"
+      puts "Added execution with id: #{response['id']}"
     end
   end
 end
