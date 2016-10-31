@@ -40,7 +40,10 @@ def api(options, method, path, payload = nil)
 end
 
 pre do |global_options,command,options,args|
-  ENV['GLI_DEBUG'] = 'true' if global_options[:debug]
+  if global_options[:debug]
+    ENV['GLI_DEBUG'] = 'true'
+    RestClient.log = 'stderr'
+  end
   true
 end
 
@@ -64,12 +67,24 @@ command :plan do |c|
   c.arg '<plan_name>'
   c.desc 'Get a plan'
   c.command :get do |sc|
+    sc.flag [:v, :version, 'version'], :desc => 'Get specific version of plan (if not specified then get latest version)'
     sc.action do |global_options, options, args|
       plan = args[0]
       help_now!('Specify plan to retrieve') unless plan
-      response = api(global_options, :get, "plans/#{plan}")
+      payload = options[:v] ? {version: options[:v]} : nil
+      response = api(global_options, :get, "plans/#{plan}", payload)
       content = Base64.decode64(response['content'])
       puts content
+    end
+  end
+  c.arg '<plan_name>'
+  c.desc 'Get version list of a plan'
+  c.command :versions do |sc|
+    sc.action do |global_options, options, args|
+      plan = args[0]
+      help_now!('Specify plan to retrieve') unless plan
+      response = api(global_options, :get, "plans/#{plan}/versions")
+      response['versions'].each{|version| puts version['name']}
     end
   end
   c.arg '<file>'
@@ -84,17 +99,15 @@ command :plan do |c|
       puts "Added plan: #{response['name']}"
     end
   end
-  c.arg '<plan_name> <file>', :multiple
+  c.arg '<file>'
   c.desc 'Update a plan from a file'
   c.command :update do |sc|
     sc.action do |global_options, options, args|
-      plan = args[0]
-      file = args[1]
-      help_now!('Specify plan to update') unless plan
-      help_now!('Specify file to update from') unless file
+      file = args[0]
+      help_now!('Specify plan file to update from') unless file
       content = Base64.encode64(File.read(file))
       payload = {content: content}
-      response = api(global_options, :put, "plans/#{plan}", payload)
+      response = api(global_options, :put, 'plans', payload)
       puts "Updated plan: #{response['name']}"
     end
   end

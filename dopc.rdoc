@@ -85,11 +85,23 @@ Delete a plan
 Get a plan
 
 
+======= Options
+======= -v|--version|--version arg
+
+Get specific version of plan (if not specified then get latest version)
+
+[Default Value] None
+
+
 ====== Command: <tt>list </tt>
 List all plans
 
 
 ====== Command: <tt>update </tt>
 Update a plan from a file
+
+
+====== Command: <tt>versions </tt>
+Get version list of a plan
 
 
