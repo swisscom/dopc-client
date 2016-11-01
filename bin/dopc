@@ -142,7 +142,7 @@ command :exec do |c|
       puts "#{response['id']}  #{response['plan']}  #{response['task']}  #{response['stepset']}  #{response['status']}  #{response['log']}"
     end
   end
-  c.arg '<plan_name> <task_name> [<stepset>]', :multiple
+  c.arg_name '<plan_name> <task_name> [<stepset>]'
   c.desc 'Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.'
   c.command :new do |sc|
     sc.action do |global_options, options, args|
