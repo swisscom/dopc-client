@@ -7,7 +7,7 @@ require 'dopc'
 
 include GLI::App
 
-program_desc 'CLI client for DOPc. For general errors the client will exit with 1. For an invalid plan file it exits with 65.'
+program_desc 'CLI client for DOPc. For general errors the client will exit with 1, for usage errors with 64.'
 
 version Dopc::VERSION
 
@@ -119,16 +119,6 @@ command :plan do |c|
       help_now!('Specify plan to delete') unless plan
       response = api(global_options, :delete, "plans/#{plan}")
       puts "Deleted plan: #{response['name']}"
-    end
-  end
-  c.arg '<plan_name>'
-  c.desc 'Check a plan'
-  c.command :check do |sc|
-    sc.action do |global_options, options, args|
-      plan = args[0]
-      help_now!('Specify plan to delete') unless plan
-      response = api(global_options, :get, "plans/#{plan}/check")
-      exit_now!("Plan is invalid", 65) unless response['valid']
     end
   end
 end
