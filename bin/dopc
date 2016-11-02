@@ -39,6 +39,10 @@ def api(options, method, path, payload = nil)
   end
 end
 
+def exec_string(hash)
+  "#{hash['id']}\t#{hash['plan']}\t#{hash['task']}\t#{hash['stepset']}\t#{hash['status']}\t#{hash['log']}"
+end
+
 pre do |global_options,command,options,args|
   if global_options[:debug]
     ENV['GLI_DEBUG'] = 'true'
@@ -61,13 +65,13 @@ command :plan do |c|
   c.command :list do |sc|
     sc.action do |global_options, options, args|
       response = api(global_options, :get, 'plans')
-      response['plans'].each { |plan| puts plan['name'] }
+      response['plans'].each{|p| puts p['name'] }
     end
   end
   c.arg '<plan_name>'
   c.desc 'Get a plan'
   c.command :get do |sc|
-    sc.flag [:v, :version, 'version'], :desc => 'Get specific version of plan (if not specified then get latest version)'
+    sc.flag [:v, :version], :desc => 'Get specific version of plan (if not specified then get latest version)'
     sc.action do |global_options, options, args|
       plan = args[0]
       help_now!('Specify plan to retrieve') unless plan
@@ -84,7 +88,7 @@ command :plan do |c|
       plan = args[0]
       help_now!('Specify plan to retrieve') unless plan
       response = api(global_options, :get, "plans/#{plan}/versions")
-      response['versions'].each{|version| puts version['name']}
+      response['versions'].each{|v| puts v['name']}
     end
   end
   c.arg '<file>'
@@ -96,7 +100,7 @@ command :plan do |c|
       content = Base64.encode64(File.read(file))
       payload = {content: content}
       response = api(global_options, :post, 'plans', payload)
-      puts "Added plan: #{response['name']}"
+      puts "Added plan '#{response['name']}'"
     end
   end
   c.arg '<file>'
@@ -108,17 +112,17 @@ command :plan do |c|
       content = Base64.encode64(File.read(file))
       payload = {content: content}
       response = api(global_options, :put, 'plans', payload)
-      puts "Updated plan: #{response['name']}"
+      puts "Updated plan '#{response['name']}'"
     end
   end
   c.arg '<plan_name>'
   c.desc 'Delete a plan'
-  c.command :del do |sc|
+  c.command :delete do |sc|
     sc.action do |global_options, options, args|
       plan = args[0]
       help_now!('Specify plan to delete') unless plan
       response = api(global_options, :delete, "plans/#{plan}")
-      puts "Deleted plan: #{response['name']}"
+      puts "Deleted plan '#{response['name']}'"
     end
   end
 end
@@ -129,7 +133,7 @@ command :exec do |c|
   c.command :list do |sc|
     sc.action do |global_options, options, args|
       response = api(global_options, :get, 'executions')
-      response['executions'].each { |exec| puts "#{exec['id']}  #{exec['plan']}  #{exec['task']}  #{exec['stepset']}  #{exec['status']}  #{exec['log']}" }
+      response['executions'].each{|e| puts exec_string(e)}
     end
   end
   c.arg '<execution_id>'
@@ -139,7 +143,7 @@ command :exec do |c|
       execution = args[0]
       help_now!('Specify an execution to get') unless execution
       response = api(global_options, :get, "executions/#{execution}")
-      puts "#{response['id']}  #{response['plan']}  #{response['task']}  #{response['stepset']}  #{response['status']}  #{response['log']}"
+      puts exec_string(response)
     end
   end
   c.arg_name '<plan_name> <task_name> [<stepset>]'
@@ -152,9 +156,33 @@ command :exec do |c|
       help_now!('Specify plan to execute') unless name
       help_now!('Specify task to execute') unless task
       payload = {plan: name, task: task}
-      stepset ? payload.merge!({stepset: stepset}) :
+      payload.merge!({stepset: stepset}) if stepset
       response = api(global_options, :post, "executions", payload)
-      puts "Added execution with id: #{response['id']}"
+      puts "Added execution '#{response['id']}'"
+    end
+  end
+  c.arg '<execution_id>'
+  c.desc 'Remove execution, does only work if not yet running'
+  c.command :remove do |sc|
+    sc.action do |global_options, options, args|
+      execution = args[0]
+      help_now!('Specify an execution to remove') unless execution
+      response = api(global_options, :delete, "executions/#{execution}")
+      puts "Removed execution '#{response['id']}'"
+      puts exec_string(response)
+    end
+  end
+  c.arg_name '<plan_name>'
+  c.desc 'Clear executions'
+  c.command :clear do |sc|
+    sc.flag [:s, :status], :multiple => true, :desc => "Executions with specified status(es) are removed", :default_value => 'done'
+    sc.action do |global_options, options, args|
+      plan = args[0]
+      payload = {statuses: Array(options[:status])}
+      payload.merge!({plan: plan}) if plan
+      response = api(global_options, :delete, "executions", payload)
+      puts "Removed executions:"
+      response['executions'].each{|e| puts exec_string(e)}
     end
   end
 end

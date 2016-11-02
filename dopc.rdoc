@@ -38,6 +38,18 @@ Manage plan executions
 
 
 ===== Commands
+====== Command: <tt>clear  <plan_name></tt>
+Clear executions
+
+
+======= Options
+======= -s|--status arg
+
+Executions with specified status(es) are removed
+
+[Default Value] done
+
+
 ====== Command: <tt>get </tt>
 Get an executions
 
@@ -48,6 +60,10 @@ List all executions
 
 ====== Command: <tt>new  <plan_name> <task_name> [<stepset>]</tt>
 Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.
+
+
+====== Command: <tt>remove </tt>
+Remove execution, does only work if not yet running
 
 
 ==== Command: <tt>help  command</tt>
@@ -73,7 +89,7 @@ Manage plans
 Add a plan from file
 
 
-====== Command: <tt>del </tt>
+====== Command: <tt>delete </tt>
 Delete a plan
 
 
@@ -82,7 +98,7 @@ Get a plan
 
 
 ======= Options
-======= -v|--version|--version arg
+======= -v|--version arg
 
 Get specific version of plan (if not specified then get latest version)
 
