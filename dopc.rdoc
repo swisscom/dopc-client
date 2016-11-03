@@ -33,7 +33,7 @@ Display the program version
 
 
 === Commands
-==== Command: <tt>exec </tt>
+==== Command: <tt>execution </tt>
 Manage plan executions
 
 
