@@ -128,7 +128,7 @@ command :plan do |c|
 end
 
 desc 'Manage plan executions'
-command :exec do |c|
+command :execution do |c|
   c.desc 'List all executions'
   c.command :list do |sc|
     sc.action do |global_options, options, args|
