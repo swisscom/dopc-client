@@ -172,14 +172,13 @@ command :execution do |c|
       puts exec_string(response)
     end
   end
-  c.arg_name '<plan_name>'
   c.desc 'Clear executions'
   c.command :clear do |sc|
     sc.flag [:s, :status], :multiple => true, :desc => "Executions with specified status(es) are removed", :default_value => 'done'
+    sc.flag [:p, :plan], :desc => "Remove only executions of this plan"
     sc.action do |global_options, options, args|
-      plan = args[0]
       payload = {statuses: Array(options[:status])}
-      payload.merge!({plan: plan}) if plan
+      payload.merge!({plan: options[:plan]}) if options[:plan]
       response = api(global_options, :delete, "executions", payload)
       puts "Removed executions:"
       response['executions'].each{|e| puts exec_string(e)}
