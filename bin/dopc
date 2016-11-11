@@ -125,6 +125,16 @@ command :plan do |c|
       puts "Deleted plan '#{response['name']}'"
     end
   end
+  c.arg '<plan_name>'
+  c.desc 'Reset the state of a plan'
+  c.command :reset do |sc|
+    sc.switch [:f, :force], :desc => "Force state reset"
+    sc.action do |global_options, options, args|
+      plan = args[0]
+      help_now!('Specify plan to delete') unless plan
+      response = api(global_options, :put, "plans/#{plan}/reset", {force: options[:force]})
+    end
+  end
 end
 
 desc 'Manage plan executions'
