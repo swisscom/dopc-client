@@ -126,6 +126,10 @@ Force state reset
 
 
 
+====== Command: <tt>state </tt>
+Get the current run state of a plan
+
+
 ====== Command: <tt>update </tt>
 Update a plan from a file
 

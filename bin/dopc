@@ -131,8 +131,18 @@ command :plan do |c|
     sc.switch [:f, :force], :desc => "Force state reset"
     sc.action do |global_options, options, args|
       plan = args[0]
-      help_now!('Specify plan to delete') unless plan
+      help_now!('Specify plan to reset') unless plan
       response = api(global_options, :put, "plans/#{plan}/reset", {force: options[:force]})
+    end
+  end
+  c.arg '<plan_name>'
+  c.desc 'Get the current run state of a plan'
+  c.command :state do |sc|
+    sc.action do |global_options, options, args|
+      plan = args[0]
+      help_now!('Specify plan to get state from') unless plan
+      response = api(global_options, :get, "plans/#{plan}/state")
+      puts response['state']
     end
   end
 end
