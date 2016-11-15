@@ -39,8 +39,12 @@ def api(options, method, path, payload = nil)
   end
 end
 
+def exec_header
+  "ID\tPlan\tTask\tStepset\tStatus\tCreated\tUpdated"
+end
+
 def exec_string(hash)
-  "#{hash['id']}\t#{hash['plan']}\t#{hash['task']}\t#{hash['stepset']}\t#{hash['status']}\t#{hash['log']}"
+  "#{hash['id']}\t#{hash['plan']}\t#{hash['task']}\t#{hash['stepset']}\t#{hash['status']}\t#{Dopc::Util.ago(hash['created_at'])}\t#{Dopc::Util.ago(hash['updated_at'])}"
 end
 
 pre do |global_options,command,options,args|
@@ -153,6 +157,7 @@ command :execution do |c|
   c.command :list do |sc|
     sc.action do |global_options, options, args|
       response = api(global_options, :get, 'executions')
+      puts exec_header
       response['executions'].each{|e| puts exec_string(e)}
     end
   end
@@ -163,7 +168,18 @@ command :execution do |c|
       execution = args[0]
       help_now!('Specify an execution to get') unless execution
       response = api(global_options, :get, "executions/#{execution}")
+      puts exec_header
       puts exec_string(response)
+    end
+  end
+  c.arg '<execution_id>'
+  c.desc "Get an execution's log"
+  c.command :log do |sc|
+    sc.action do |global_options, options, args|
+      execution = args[0]
+      help_now!('Specify an execution to get the log from') unless execution
+      response = api(global_options, :get, "executions/#{execution}/log")
+      puts response['log']
     end
   end
   c.arg_name '<plan_name> <task_name> [<stepset>]'
@@ -189,6 +205,7 @@ command :execution do |c|
       help_now!('Specify an execution to remove') unless execution
       response = api(global_options, :delete, "executions/#{execution}")
       puts "Removed execution '#{response['id']}'"
+      puts exec_header
       puts exec_string(response)
     end
   end
@@ -201,6 +218,7 @@ command :execution do |c|
       payload.merge!({plan: options[:plan]}) if options[:plan]
       response = api(global_options, :delete, "executions", payload)
       puts "Removed executions:"
+      puts exec_header
       response['executions'].each{|e| puts exec_string(e)}
     end
   end

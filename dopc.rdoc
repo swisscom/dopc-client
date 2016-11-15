@@ -65,6 +65,10 @@ Get an executions
 List all executions
 
 
+====== Command: <tt>log </tt>
+Get an execution's log
+
+
 ====== Command: <tt>new  <plan_name> <task_name> [<stepset>]</tt>
 Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.
 
