@@ -32,6 +32,7 @@ TODO
 
 * Authentication
 * Setting up a DOPc service for testing
+* Output could use better formatting: align columns with tabs?
 
 ## Troubleshooting
 
