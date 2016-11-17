@@ -32,6 +32,7 @@ arg_name 'api'
 flag [:a, :api]
 
 desc 'Authentication token to authorize with DOPc service'
+default_value ''
 arg_name 'token'
 flag [:t, :auth_token]
 

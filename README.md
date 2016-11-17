@@ -23,7 +23,8 @@ existing configuration file can be edited by hand or overwritten with
 ## Contributing
 
 * Don't forget to generate rdoc file with `bundle exec dopc
-  _doc` after changing code.
+  _doc` after changing code, *be careful to not include your default
+  authentication token from the config file in the generated rdoc file!*
 * Tests use rspec-command to invoke the bin script. Therefor a DOPc service
   must be running on the default address and port. Also, if tests fail it must
   be reset manually so tests have a clean setup to run again (see todos).
@@ -40,8 +41,13 @@ TODO
 
 ## Todo
 
-* Setting up a DOPc service for testing
+* Testing: Setting up a DOPc service for testing?
 * Output could use better formatting: align columns with tabs?
+
+## Caveats
+
+* When doing `dopc _doc` it will put the auth token from config file as default
+  value into the generated documentation.
 
 ## Troubleshooting
 
