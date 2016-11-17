@@ -24,11 +24,14 @@ default_value '1'
 arg_name 'api'
 flag [:a, :api]
 
+desc 'Verify SSL certificate when doing HTTPS'
+switch [:i, :insecure]
+
 desc 'Show debug output'
 switch [:d, :debug]
 
 def api(options, method, path, payload = nil)
-  client = Dopc::ApiClient.new(options[:url], options[:api])
+  client = Dopc::ApiClient.new(options[:url], options[:api], options[:insecure])
   begin
     body = client.request(method, path, payload)
     return body.empty? ? {} : JSON.parse(body)

@@ -4,9 +4,10 @@ require 'rest-client'
 module Dopc
   class ApiClient
 
-    def initialize(base_url, api_version)
+    def initialize(base_url, api_version, insecure)
       @base_url = base_url
       @api_version = api_version
+      @insecure = insecure
     end
 
     def url(path)
@@ -18,7 +19,7 @@ module Dopc
     end
 
     def request(method, path, payload = nil)
-      response = RestClient::Request.execute(method: method, url: url(path), headers: headers, payload: (payload ? payload.to_json : nil))
+      response = RestClient::Request.execute(method: method, url: url(path), headers: headers, payload: (payload ? payload.to_json : nil), verify_ssl: !@insecure)
       return response.body
     end
 
