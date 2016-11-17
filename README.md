@@ -7,8 +7,18 @@ See rdoc for usage documentation.
 ## Quickstart
 
 * Run `bin/dopc --help` to see the usage
-* Use e.g. `bin/dopc --url http://dop.example.com --api 1` to specify a
-  different URL and API version
+* Create config file with `bin/dopc initconfig`
+* Set URL and authentication token in your configuration
+* Run `bin/dopc ping` to verify calling the DOPc service
+
+## Configuration
+
+The configuration must be created initially with the `initconfig` command. This
+will create a configuration in `/etc/dop/dopc.conf` for the root user, or in
+`~/.dop/dopc.conf` for anybody else. The options used when calling `initconfig`
+will be written to the configuration file, otherwise defaults are written. An
+existing configuration file can be edited by hand or overwritten with
+`initconfig` using the `--force` option.
 
 ## Contributing
 
@@ -30,7 +40,6 @@ TODO
 
 ## Todo
 
-* Authentication
 * Setting up a DOPc service for testing
 * Output could use better formatting: align columns with tabs?
 
