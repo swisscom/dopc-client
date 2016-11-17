@@ -14,7 +14,7 @@ API version to use when talking to DOPc service
 
 Authentication token to authorize with DOPc service
 
-[Default Value] 1234
+[Default Value] None
 
 
 === -u|--url url
