@@ -5,9 +5,16 @@ v0.0.1
 === Global Options
 === -a|--api api
 
-API version to use
+API version to use when talking to DOPc service
 
 [Default Value] 1
+
+
+=== -t|--auth_token token
+
+Authentication token to authorize with DOPc service
+
+[Default Value] 1234
 
 
 === -u|--url url
@@ -42,21 +49,6 @@ Manage plan executions
 Clear executions
 
 
-======= Options
-======= -p|--plan arg
-
-Remove only executions of this plan
-
-[Default Value] None
-
-
-======= -s|--status arg
-
-Executions with specified status(es) are removed
-
-[Default Value] done
-
-
 ====== Command: <tt>get </tt>
 Get an executions
 
@@ -87,6 +79,16 @@ List commands one per line, to assist with shell completion
 
 
 
+==== Command: <tt>initconfig </tt>
+Initialize the config file using current global options
+
+Initializes a configuration file where you can set default options for command line flags, both globally and on a per-command basis.  These defaults override the built-in defaults and allow you to omit commonly-used command line flags when invoking this program
+===== Options
+===== --[no-]force
+force overwrite of existing config file
+
+
+
 ==== Command: <tt>ping </tt>
 Ping the API
 
@@ -108,26 +110,12 @@ Delete a plan
 Get a plan
 
 
-======= Options
-======= -v|--version arg
-
-Get specific version of plan (if not specified then get latest version)
-
-[Default Value] None
-
-
 ====== Command: <tt>list </tt>
 List all plans
 
 
 ====== Command: <tt>reset </tt>
 Reset the state of a plan
-
-
-======= Options
-======= -f|--[no-]force
-Force state reset
-
 
 
 ====== Command: <tt>state </tt>

@@ -3,6 +3,8 @@
 require 'gli'
 require 'base64'
 require 'rest-client'
+require 'etc'
+
 require 'dopc'
 
 include GLI::App
@@ -10,6 +12,11 @@ include GLI::App
 program_desc 'CLI client for DOPc. For general errors the client will exit with 1, for usage errors with 64.'
 
 version Dopc::VERSION
+
+USER = Etc.getpwuid(Process.uid)
+CONFIG_FILE = USER.name == 'root' ? File.join('etc', 'dopc', 'dopc.conf') : File.join(USER.dir, '.dop', 'dopc.conf')
+
+config_file CONFIG_FILE
 
 subcommand_option_handling :normal
 arguments :strict
@@ -19,23 +26,35 @@ default_value 'http://localhost:3000'
 arg_name 'url'
 flag [:u, :url]
 
-desc 'API version to use'
+desc 'API version to use when talking to DOPc service'
 default_value '1'
 arg_name 'api'
 flag [:a, :api]
+
+desc 'Authentication token to authorize with DOPc service'
+arg_name 'token'
+flag [:t, :auth_token]
 
 desc 'Show debug output'
 switch [:d, :debug]
 
 def api(options, method, path, payload = nil)
-  client = Dopc::ApiClient.new(options[:url], options[:api])
+  client = Dopc::ApiClient.new(options[:url], options[:api], options[:auth_token])
   begin
     body = client.request(method, path, payload)
     return body.empty? ? {} : JSON.parse(body)
   rescue RestClient::Exception => e
-    body = e.response.body
-    error = body.empty? ? 'Unknown' : JSON.parse(body)['error']
-    exit_now!(error, 1)
+    resp = e.response
+    error = 'Unknown'
+    if !resp.body.empty?
+      begin
+        json = JSON.parse(resp.body)
+        error = json['error'] if json.has_key?('error')
+      rescue JSON::ParserError
+        error = resp.body.to_s
+      end
+    end
+    exit_now!("#{resp.code}: #{error}", 1)
   end
 end
 
