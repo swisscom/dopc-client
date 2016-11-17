@@ -6,10 +6,10 @@ See rdoc for usage documentation.
 
 ## Quickstart
 
-* Run `bin/dopc --help` to see the usage
-* Create config file with `bin/dopc initconfig`
+* Run `bundle exec dopc --help` to see the usage
+* Create config file with `bundle exec dopc initconfig`
 * Set URL and authentication token in your configuration
-* Run `bin/dopc ping` to verify calling the DOPc service
+* Run `bundle exec dopc ping` to verify calling the DOPc service
 
 ## Configuration
 
@@ -22,9 +22,8 @@ existing configuration file can be edited by hand or overwritten with
 
 ## Contributing
 
-* Don't forget to generate rdoc file with `bundle exec dopc
-  _doc` after changing code, *be careful to not include your default
-  authentication token from the config file in the generated rdoc file!*
+* Don't forget to generate rdoc file with `bundle exec dopc _doc` after
+  changing code.
 * Tests use rspec-command to invoke the bin script. Therefor a DOPc service
   must be running on the default address and port. Also, if tests fail it must
   be reset manually so tests have a clean setup to run again (see todos).
@@ -46,8 +45,8 @@ TODO
 
 ## Caveats
 
-* When doing `dopc _doc` it will put the auth token from config file as default
-  value into the generated documentation.
+* If using debug option, then the authentication token is shown plaintext in
+  the output.
 
 ## Troubleshooting
 

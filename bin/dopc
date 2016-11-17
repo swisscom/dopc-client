@@ -31,16 +31,19 @@ default_value '1'
 arg_name 'api'
 flag [:a, :api]
 
-desc 'Authentication token to authorize with DOPc service'
+desc 'Authentication token to use with DOPc service'
 default_value ''
 arg_name 'token'
-flag [:t, :auth_token]
+flag [:t, :auth_token], :mask => true
+
+desc 'Do not verify peer certificate when doing SSL'
+switch [:i, :insecure]
 
 desc 'Show debug output'
 switch [:d, :debug]
 
 def api(options, method, path, payload = nil)
-  client = Dopc::ApiClient.new(options[:url], options[:api], options[:auth_token])
+  client = Dopc::ApiClient.new(options[:url], options[:api], options[:auth_token], options[:insecure])
   begin
     body = client.request(method, path, payload)
     return body.empty? ? {} : JSON.parse(body)

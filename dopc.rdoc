@@ -12,9 +12,9 @@ API version to use when talking to DOPc service
 
 === -t|--auth_token token
 
-Authentication token to authorize with DOPc service
+Authentication token to use with DOPc service
 
-[Default Value] None
+[Default Value] ********
 
 
 === -u|--url url
@@ -31,6 +31,11 @@ Show debug output
 
 === --help
 Show this message
+
+
+
+=== -i|--[no-]insecure
+Do not verify peer certificate when doing SSL
 
 
 
