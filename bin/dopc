@@ -63,11 +63,16 @@ def api(options, method, path, payload = nil)
 end
 
 def exec_header
-  "ID\tPlan\tTask\tStepset\tStatus\tCreated\tUpdated"
+  "ID | Plan | Task | Stepset | Status"
 end
 
 def exec_string(hash)
-  "#{hash['id']}\t#{hash['plan']}\t#{hash['task']}\t#{hash['stepset']}\t#{hash['status']}\t#{Dopc::Util.ago(hash['created_at'])}\t#{Dopc::Util.ago(hash['updated_at'])}"
+  s = ''
+  ['id', 'plan', 'task', 'stepset', 'status'].each_with_index do |v, i|
+    s += ' | ' unless i == 0
+    s += hash[v].to_s.empty? ? '-' : hash[v].to_s
+  end
+  s
 end
 
 pre do |global_options,command,options,args|
