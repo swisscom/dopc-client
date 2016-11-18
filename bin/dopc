@@ -63,15 +63,27 @@ def api(options, method, path, payload = nil)
 end
 
 def exec_header
-  "ID | Plan | Task | Stepset | Status"
+  "ID | Plan | Task | Status | Created | Started | Duration | Stepset"
 end
 
 def exec_string(hash)
   s = ''
-  ['id', 'plan', 'task', 'stepset', 'status'].each_with_index do |v, i|
-    s += ' | ' unless i == 0
-    s += hash[v].to_s.empty? ? '-' : hash[v].to_s
+  s += hash['id'].to_s
+  s += ' | ' + hash['plan']
+  s += ' | ' + hash['task']
+  s += ' | ' + hash['status']
+  s += ' | ' + Dopc::Util.ago(Time.parse(hash['created_at']))
+  if hash['started_at']
+    s += ' | ' + Dopc::Util.ago(Time.parse(hash['started_at']))
+  else
+    s += ' | -'
   end
+  if hash['finished_at']
+    s += ' | ' + Dopc::Util.ago(Time.parse(hash['finished_at']), Time.parse(hash['started_at']))
+  else
+    s += ' | -'
+  end
+  s += ' | ' + (hash['stepset'] ? hash['stepset'] : '-')
   s
 end
 
