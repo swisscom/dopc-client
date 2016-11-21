@@ -2,7 +2,9 @@ require 'time'
 
 module Dopc::Util
 
-  def self.ago(t1, t2 = Time.now)
+  def self.duration(t1, t2 = Time.now)
+    t1 = Time.parse(t1) if t1.is_a?(String)
+    t2 = Time.parse(t2) if t2.is_a?(String)
     ago = t2 - t1
     secs = ago.to_int
     mins = secs / 60
@@ -16,6 +18,19 @@ module Dopc::Util
       "#{mins}m"
     else
       "#{secs}s"
+    end
+  end
+
+  def self.pretty_time(t)
+    t = Time.parse(t) if t.is_a?(String)
+    ago = Time.now - t
+    days = ago / (24*3600)
+    if days > 365
+      t.strftime('%Y-%m-%d')
+    elsif days > 1
+      t.strftime('%m-%d %H:%M:%S')
+    else
+      t.strftime('%H:%M:%S')
     end
   end
 

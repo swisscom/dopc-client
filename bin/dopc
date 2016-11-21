@@ -63,7 +63,7 @@ def api(options, method, path, payload = nil)
 end
 
 def exec_header
-  "ID | Plan | Task | Status | Created | Started | Duration | Stepset | Remove disk"
+  "ID | Plan | Task | Status | Created | Wait | Run | Stepset | Remove disk"
 end
 
 def exec_string(hash)
@@ -72,14 +72,14 @@ def exec_string(hash)
   s += ' | ' + hash['plan']
   s += ' | ' + hash['task']
   s += ' | ' + hash['status']
-  s += ' | ' + Dopc::Util.ago(Time.parse(hash['created_at']))
+  s += ' | ' + Dopc::Util.pretty_time(hash['created_at'])
   if hash['started_at']
-    s += ' | ' + Dopc::Util.ago(Time.parse(hash['started_at']))
+    s += ' | ' + Dopc::Util.duration(hash['created_at'], hash['started_at'])
   else
     s += ' | -'
   end
   if hash['finished_at']
-    s += ' | ' + Dopc::Util.ago(Time.parse(hash['finished_at']), Time.parse(hash['started_at']))
+    s += ' | ' + Dopc::Util.duration(hash['started_at'], hash['finished_at'])
   else
     s += ' | -'
   end
