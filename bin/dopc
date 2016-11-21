@@ -63,7 +63,7 @@ def api(options, method, path, payload = nil)
 end
 
 def exec_header
-  "ID | Plan | Task | Status | Created | Started | Duration | Stepset"
+  "ID | Plan | Task | Status | Created | Started | Duration | Stepset | Remove disk"
 end
 
 def exec_string(hash)
@@ -84,6 +84,7 @@ def exec_string(hash)
     s += ' | -'
   end
   s += ' | ' + (hash['stepset'] ? hash['stepset'] : '-')
+  s += ' | ' + (hash['rmdisk'] ? hash['rmdisk'].to_s : '-')
   s
 end
 
@@ -222,23 +223,57 @@ command :execution do |c|
       puts response['log']
     end
   end
-  c.arg_name '<plan_name> <task_name> [<stepset>]'
-  c.desc 'Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.'
-  c.command :new do |sc|
+  c.arg_name '<plan_name>'
+  c.desc 'Setup a plan (deploy and run)'
+  c.command :setup do |sc|
+    sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
     sc.action do |global_options, options, args|
       name = args[0]
-      task = args[1]
-      stepset = args[2]
-      help_now!('Specify plan to execute') unless name
-      help_now!('Specify task to execute') unless task
-      payload = {plan: name, task: task}
-      payload.merge!({stepset: stepset}) if stepset
+      help_now!('Specify a plan to set up') unless name
+      payload = {plan: name, task: 'setup'}
+      payload.merge!({stepset: options[:stepset]}) if options[:stepset]
+      response = api(global_options, :post, "executions", payload)
+      puts "Added execution '#{response['id']}'"
+    end
+  end
+  c.arg_name '<plan_name>'
+  c.desc 'Deploy a plan'
+  c.command :deploy do |sc|
+    sc.action do |global_options, options, args|
+      name = args[0]
+      help_now!('Specify a plan to deploy') unless name
+      payload = {plan: name, task: 'deploy'}
+      response = api(global_options, :post, "executions", payload)
+      puts "Added execution '#{response['id']}'"
+    end
+  end
+  c.arg_name '<plan_name>'
+  c.desc 'Run a plan'
+  c.command :run do |sc|
+    sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
+    sc.action do |global_options, options, args|
+      name = args[0]
+      help_now!('Specify a plan to set up') unless name
+      payload = {plan: name, task: 'run'}
+      payload.merge!({stepset: options[:stepset]}) if options[:stepset]
+      response = api(global_options, :post, "executions", payload)
+      puts "Added execution '#{response['id']}'"
+    end
+  end
+  c.arg_name '<plan_name>'
+  c.desc 'Undeploy a plan'
+  c.command :undeploy do |sc|
+    sc.switch [:r, :rmdisk], :desc => 'Whether to delete or keep disks'
+    sc.action do |global_options, options, args|
+      name = args[0]
+      help_now!('Specify a plan to set up') unless name
+      payload = {plan: name, task: 'undeploy', rmdisk: options[:rmdisk]}
       response = api(global_options, :post, "executions", payload)
       puts "Added execution '#{response['id']}'"
     end
   end
   c.arg '<execution_id>'
-  c.desc 'Remove execution, does only work if not yet running'
+  c.desc 'Remove an execution, does only work if it\'s not running'
   c.command :remove do |sc|
     sc.action do |global_options, options, args|
       execution = args[0]

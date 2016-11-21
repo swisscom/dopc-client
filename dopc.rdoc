@@ -54,6 +54,10 @@ Manage plan executions
 Clear executions
 
 
+====== Command: <tt>deploy  <plan_name></tt>
+Deploy a plan
+
+
 ====== Command: <tt>get </tt>
 Get an executions
 
@@ -66,12 +70,20 @@ List all executions
 Get an execution's log
 
 
-====== Command: <tt>new  <plan_name> <task_name> [<stepset>]</tt>
-Execute a plan (DOPv and DOPi). The task must be one of: setup (run and deploy), deploy, run, undeploy.
-
-
 ====== Command: <tt>remove </tt>
-Remove execution, does only work if not yet running
+Remove an execution, does only work if it's not running
+
+
+====== Command: <tt>run  <plan_name></tt>
+Run a plan
+
+
+====== Command: <tt>setup  <plan_name></tt>
+Setup a plan (deploy and run)
+
+
+====== Command: <tt>undeploy  <plan_name></tt>
+Undeploy a plan
 
 
 ==== Command: <tt>help  command</tt>
