@@ -148,14 +148,21 @@ command :plan do |c|
       puts "Added plan '#{response['name']}'"
     end
   end
-  c.arg '<file>'
+  c.arg '<plan_name_or_file>'
   c.desc 'Update a plan from a file'
   c.command :update do |sc|
+    sc.switch [:c, :clear], :desc => 'Remove current DOPi state and start with clean state'
+    sc.switch [:i, :ignore], :desc => 'Ignore update and just set new version'
     sc.action do |global_options, options, args|
-      file = args[0]
-      help_now!('Specify plan file to update from') unless file
-      content = Base64.encode64(File.read(file))
-      payload = {content: content}
+      plan = args[0]
+      help_now!('Specify plan name or file to update from') unless plan
+      if File.file?(plan)
+        payload = {content: Base64.encode64(File.read(plan))}
+      else
+        payload = {plan: plan}
+      end
+      payload['clear'] = true if options[:clear]
+      payload['ignore'] = true if options[:ignore]
       response = api(global_options, :put, 'plans', payload)
       puts "Updated plan '#{response['name']}'"
     end
