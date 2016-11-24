@@ -248,6 +248,17 @@ command :execution do |c|
     end
   end
   c.arg_name '<plan_name>'
+  c.desc 'Teardown a plan'
+  c.command :teardown do |sc|
+    sc.action do |global_options, options, args|
+      name = args[0]
+      help_now!('Specify a plan to tear down') unless name
+      payload = {plan: name, task: 'teardown'}
+      response = api(global_options, :post, "executions", payload)
+      puts "Added execution '#{response['id']}'"
+    end
+  end
+  c.arg_name '<plan_name>'
   c.desc 'Deploy a plan'
   c.command :deploy do |sc|
     sc.action do |global_options, options, args|

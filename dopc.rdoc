@@ -82,6 +82,10 @@ Run a plan
 Setup a plan (deploy and run)
 
 
+====== Command: <tt>teardown  <plan_name></tt>
+Teardown a plan
+
+
 ====== Command: <tt>undeploy  <plan_name></tt>
 Undeploy a plan
 
