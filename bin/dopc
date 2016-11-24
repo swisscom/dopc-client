@@ -308,11 +308,13 @@ command :execution do |c|
   end
   c.desc 'Clear executions'
   c.command :clear do |sc|
-    sc.flag [:s, :status], :multiple => true, :desc => "Executions with specified status(es) are removed", :default_value => 'done'
-    sc.flag [:p, :plan], :desc => "Remove only executions of this plan"
+    sc.flag [:s, :status], :multiple => true, :desc => 'Remove only executions with this status(es)', :default_value => 'done'
+    sc.flag [:p, :plan], :desc => 'Remove only executions of this plan'
+    sc.flag [:a, :age], :desc => 'Remove only executions created at least <age> seconds ago'
     sc.action do |global_options, options, args|
       payload = {statuses: Array(options[:status])}
       payload.merge!({plan: options[:plan]}) if options[:plan]
+      payload.merge!({age: Integer(options[:age])}) if options[:age]
       response = api(global_options, :delete, "executions", payload)
       puts "Removed executions:"
       puts exec_header
