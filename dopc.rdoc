@@ -83,7 +83,7 @@ Setup a plan (deploy and run)
 
 
 ====== Command: <tt>teardown  <plan_name></tt>
-Teardown a plan
+Teardown a plan (Undeploy and reset DOPi state)
 
 
 ====== Command: <tt>undeploy  <plan_name></tt>

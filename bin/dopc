@@ -6,6 +6,7 @@ require 'rest-client'
 require 'etc'
 
 require 'dopc'
+require 'dopi/cli'
 
 include GLI::App
 
@@ -238,17 +239,20 @@ command :execution do |c|
   c.desc 'Setup a plan (deploy and run)'
   c.command :setup do |sc|
     sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
+    Dopi::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
+      options[:run_for_nodes] = Dopi::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to set up') unless name
       payload = {plan: name, task: 'setup'}
       payload.merge!({stepset: options[:stepset]}) if options[:stepset]
+      payload.merge!({run_for_nodes: YAML::dump(options[:run_for_nodes])}) if options[:run_for_nodes]
       response = api(global_options, :post, "executions", payload)
       puts "Added execution '#{response['id']}'"
     end
   end
   c.arg_name '<plan_name>'
-  c.desc 'Teardown a plan'
+  c.desc 'Teardown a plan (Undeploy and reset DOPi state)'
   c.command :teardown do |sc|
     sc.action do |global_options, options, args|
       name = args[0]
@@ -273,11 +277,14 @@ command :execution do |c|
   c.desc 'Run a plan'
   c.command :run do |sc|
     sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
+    Dopi::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
+      options[:run_for_nodes] = Dopi::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to set up') unless name
       payload = {plan: name, task: 'run'}
       payload.merge!({stepset: options[:stepset]}) if options[:stepset]
+      payload.merge!({run_for_nodes: YAML::dump(options[:run_for_nodes])}) if options[:run_for_nodes]
       response = api(global_options, :post, "executions", payload)
       puts "Added execution '#{response['id']}'"
     end
