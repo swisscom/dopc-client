@@ -1,6 +1,6 @@
 # Ensure we require the local version and not one we might have installed already
 require File.join([File.dirname(__FILE__),'lib','dopc','version.rb'])
-spec = Gem::Specification.new do |s| 
+spec = Gem::Specification.new do |s|
   s.name = 'dopc'
   s.version = Dopc::VERSION
   s.author = 'Anselm Strauss'
@@ -25,5 +25,4 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('gli','~> 2')
   s.add_runtime_dependency('rest-client','~> 2')
   s.add_runtime_dependency('json','~> 1')
-  s.add_runtime_dependency('dopi')
 end

@@ -6,7 +6,8 @@ require 'rest-client'
 require 'etc'
 
 require 'dopc'
-require 'dopi/cli'
+require 'dop_common'
+require 'dop_common/cli/node_selection'
 
 include GLI::App
 
@@ -239,9 +240,9 @@ command :execution do |c|
   c.desc 'Setup a plan (deploy and run)'
   c.command :setup do |sc|
     sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
-    Dopi::Cli.node_select_options(sc)
+    DopCommon::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
-      options[:run_for_nodes] = Dopi::Cli.parse_node_select_options(options)
+      options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to set up') unless name
       payload = {plan: name, task: 'setup'}
@@ -254,7 +255,9 @@ command :execution do |c|
   c.arg_name '<plan_name>'
   c.desc 'Teardown a plan (Undeploy and reset DOPi state)'
   c.command :teardown do |sc|
+    DopCommon::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
+      options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to tear down') unless name
       payload = {plan: name, task: 'teardown'}
@@ -265,7 +268,9 @@ command :execution do |c|
   c.arg_name '<plan_name>'
   c.desc 'Deploy a plan'
   c.command :deploy do |sc|
+    DopCommon::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
+      options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to deploy') unless name
       payload = {plan: name, task: 'deploy'}
@@ -277,9 +282,9 @@ command :execution do |c|
   c.desc 'Run a plan'
   c.command :run do |sc|
     sc.flag [:s, :stepset], :desc => 'Optionally set a stepset for DOPi instead of using the default one'
-    Dopi::Cli.node_select_options(sc)
+    DopCommon::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
-      options[:run_for_nodes] = Dopi::Cli.parse_node_select_options(options)
+      options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to set up') unless name
       payload = {plan: name, task: 'run'}
@@ -293,7 +298,9 @@ command :execution do |c|
   c.desc 'Undeploy a plan'
   c.command :undeploy do |sc|
     sc.switch [:r, :rmdisk], :desc => 'Whether to delete or keep disks'
+    DopCommon::Cli.node_select_options(sc)
     sc.action do |global_options, options, args|
+      options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options)
       name = args[0]
       help_now!('Specify a plan to set up') unless name
       payload = {plan: name, task: 'undeploy', rmdisk: options[:rmdisk]}
