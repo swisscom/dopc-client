@@ -22,6 +22,8 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('byebug')
   s.add_development_dependency('rspec')
   s.add_development_dependency('rspec-command')
+  s.add_development_dependency('pry')
+  s.add_development_dependency('pry-byebug')
   s.add_runtime_dependency('gli','~> 2')
   s.add_runtime_dependency('rest-client','~> 2')
   s.add_runtime_dependency('json','~> 1')
