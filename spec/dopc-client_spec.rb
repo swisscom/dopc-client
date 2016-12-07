@@ -1,21 +1,21 @@
-require 'dopc/version'
+require 'dopc-client/version'
 require 'spec_helper'
 require 'byebug'
 
 describe 'DOPc CLI' do
 
   describe 'get help' do
-    command 'dopc --help'
+    command 'dopc-client --help'
     its(:stdout) { is_expected.to include('SYNOPSIS') }
   end
 
   describe 'get version' do
-    command 'dopc --version'
-    its(:stdout) { is_expected.to eq "dopc version #{Dopc::VERSION}\n" }
+    command 'dopc-client --version'
+    its(:stdout) { is_expected.to eq "dopc-client version #{Dopc::VERSION}\n" }
   end
 
   describe 'wrong usage' do
-    command 'dopc invalid', allow_error: true
+    command 'dopc-client invalid', allow_error: true
     its(:exitstatus) { is_expected.to eq 64 }
   end
 

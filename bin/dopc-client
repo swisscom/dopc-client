@@ -5,7 +5,7 @@ require 'base64'
 require 'rest-client'
 require 'etc'
 
-require 'dopc'
+require 'dopc-client'
 require 'dop_common'
 require 'dop_common/cli/node_selection'
 
@@ -16,7 +16,7 @@ program_desc 'CLI client for DOPc. For general errors the client will exit with 
 version Dopc::VERSION
 
 USER = Etc.getpwuid(Process.uid)
-CONFIG_FILE = USER.name == 'root' ? File.join('etc', 'dopc', 'dopc.conf') : File.join(USER.dir, '.dop', 'dopc.conf')
+CONFIG_FILE = USER.name == 'root' ? File.join('etc', 'dopc', 'dopc-client.conf') : File.join(USER.dir, '.dop', 'dopc-client.conf')
 
 config_file CONFIG_FILE
 

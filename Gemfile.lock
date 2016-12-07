@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    dopc (0.0.1)
+    dopc-version (0.0.2)
       gli (~> 2)
       json (~> 1)
       rest-client (~> 2)
@@ -86,7 +86,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   dop_common!
-  dopc!
+  dopc-version!
   pry
   pry-byebug
   rake

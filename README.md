@@ -6,24 +6,24 @@ See rdoc for usage documentation.
 
 ## Quickstart
 
-* Run `bundle exec dopc --help` to see the usage
-* Create config file with `bundle exec dopc initconfig`
+* Run `bundle exec dopc-client --help` to see the usage
+* Create config file with `bundle exec dopc-client initconfig`
 * Set URL and authentication token in your configuration
-* Run `bundle exec dopc ping` to verify calling the DOPc service
+* Run `bundle exec dopc-client ping` to verify calling the DOPc service
 
 ## Configuration
 
 The configuration must be created initially with the `initconfig` command. This
-will create a configuration in `/etc/dop/dopc.conf` for the root user, or in
-`~/.dop/dopc.conf` for anybody else. The options used when calling `initconfig`
-will be written to the configuration file, otherwise defaults are written. An
-existing configuration file can be edited by hand or overwritten with
-`initconfig` using the `--force` option.
+will create a configuration in `/etc/dop/dopc-client.conf` for the root user,
+or in `~/.dop/dopc-client.conf` for anybody else. The options used when calling
+`initconfig` will be written to the configuration file, otherwise defaults are
+written. An existing configuration file can be edited by hand or overwritten
+with `initconfig` using the `--force` option.
 
 ## Contributing
 
-* Don't forget to generate rdoc file with `bundle exec dopc _doc` after
-  changing code.
+* Don't forget to generate rdoc file with `bundle exec dopc-client _doc`
+  after changing code.
 * Tests use rspec-command to invoke the bin script. Therefor a DOPc service
   must be running on the default address and port. Also, if tests fail it must
   be reset manually so tests have a clean setup to run again (see todos).

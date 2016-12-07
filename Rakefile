@@ -9,7 +9,7 @@ Rake::RDocTask.new do |rd|
   rd.title = 'CLI client for DOPc'
 end
 
-spec = eval(File.read('dopc.gemspec'))
+spec = eval(File.read('dopc-client.gemspec'))
 Gem::PackageTask.new(spec) do |pkg|
 end
 
