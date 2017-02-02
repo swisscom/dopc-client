@@ -1,6 +1,6 @@
 == dopc-client - CLI client for DOPc. For general errors the client will exit with 1, for usage errors with 64.
 
-v0.0.3
+v0.0.4
 
 === Global Options
 === -a|--api api

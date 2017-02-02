@@ -1,3 +1,6 @@
+# 0.0.4 02-02-2017
+ * Update `dop_common`
+
 # 0.0.3 07-12-2016
  * Update `dop_common`
  * Fix gem name
