@@ -28,4 +28,5 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('rest-client','~> 2')
   s.add_runtime_dependency('json','~> 1')
   s.add_runtime_dependency('dop_common','~> 0.11', '>= 0.11.0')
+  s.add_runtime_dependency('table_print','~> 1')
 end
