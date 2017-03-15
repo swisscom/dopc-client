@@ -8,6 +8,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = 'http://www.swisscom.ch'
   s.platform = Gem::Platform::RUBY
   s.summary = 'CLI client for DOPc'
+  spec.license = 'Apache-2.0'
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
