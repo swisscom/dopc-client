@@ -1,5 +1,5 @@
 GIT
-  remote: https://gitlab.swisscloud.io/puppet-dop/dop_common.git
+  remote: https://github.com/swisscom/dop_common.git
   revision: 63c425c2593f4636e66d31f1686965825a523fd5
   tag: v0.12.0
   specs:
