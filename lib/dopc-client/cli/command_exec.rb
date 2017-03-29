@@ -39,7 +39,7 @@ module Dopc
               execution = args[0]
               help_now!('Specify an execution to get the log from') unless execution
               response = api(global_options, :get, "executions/#{execution}/log")
-              puts response
+              puts response['log']
             end
           end
           c.arg '<execution_id>'
