@@ -1,3 +1,3 @@
-module Dopc
+class DopcClient
   VERSION = '0.0.4'
 end

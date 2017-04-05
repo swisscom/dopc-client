@@ -2,7 +2,7 @@
 # DOPi CLI gloable options
 #
 
-module Dopc
+class DopcClient
   module Cli
 
     def self.command_ping(base)

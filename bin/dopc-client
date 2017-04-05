@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'dopc-client/cli'
-exit Dopc::Cli.run(ARGV)
+exit DopcClient::Cli.run(ARGV)

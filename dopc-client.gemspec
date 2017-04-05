@@ -2,13 +2,13 @@
 require File.join([File.dirname(__FILE__),'lib','dopc-client','version.rb'])
 spec = Gem::Specification.new do |s|
   s.name = 'dopc-client'
-  s.version = Dopc::VERSION
+  s.version = DopcClient::VERSION
   s.author = 'Anselm Strauss'
   s.email = 'Anselm.Strauss@swisscom.com'
   s.homepage = 'http://www.swisscom.ch'
   s.platform = Gem::Platform::RUBY
   s.summary = 'CLI client for DOPc'
-  spec.license = 'Apache-2.0'
+  s.license = 'Apache-2.0'
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
@@ -28,6 +28,6 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('gli','~> 2')
   s.add_runtime_dependency('rest-client','~> 2')
   s.add_runtime_dependency('json','~> 1')
-  s.add_runtime_dependency('dop_common','~> 0.12', '>= 0.12.0')
+  s.add_runtime_dependency('dop_common','~> 0.13', '>= 0.13.0')
   s.add_runtime_dependency('table_print','~> 1')
 end

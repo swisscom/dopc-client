@@ -2,34 +2,29 @@
 # DOPi CLI gloable options
 #
 
-module Dopc
+class DopcClient
   module Cli
 
     def self.global_options(base)
       base.class_eval do
         desc 'URL where DOPc service runs'
         default_value 'http://localhost:3000'
-        arg_name 'url'
-        flag [:u, :url]
+        arg_name 'endpoint'
+        flag [:e, :endpoint]
 
         desc 'API version to use when talking to DOPc service'
-        default_value '1'
-        arg_name 'api'
-        flag [:a, :api]
+        default_value 1
+        arg_name 'api_version'
+        flag [:a, :api_version]
 
         desc 'Authentication token to use with DOPc service'
         default_value ''
-        arg_name 'token'
-        flag [:t, :auth_token], :mask => true
+        arg_name 'auth_token'
+        flag [:o, :auth_token], :mask => true
 
-        desc 'Do not verify peer certificate when doing SSL'
-        switch [:i, :insecure]
-
-        desc 'Show debug output'
-        switch [:d, :debug]
-
-        desc 'Show stacktrace on crash'
-        switch [:trace]
+        desc 'Verify peer certificate when doing SSL'
+        default_value true
+        switch [:i, :verify_ssl]
       end
     end
 

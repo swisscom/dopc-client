@@ -3,7 +3,7 @@
 #
 require 'table_print'
 
-module Dopc
+class DopcClient
   module Cli
     def self.print_execs(execs)
       execs = [execs] unless execs.kind_of?(Array)
@@ -15,58 +15,68 @@ module Dopc
       base.class_eval do
         desc 'Manage plan executions'
         command :execution do |c|
+
           c.desc 'List all executions'
           c.command :list do |sc|
             sc.action do |global_options, options, args|
-              response = api(global_options, :get, 'executions')
-              print_execs(response)
+              execs = Exec.list
+              print_execs(execs)
             end
           end
+
           c.arg '<execution_id>'
           c.desc 'Get an executions'
           c.command :get do |sc|
             sc.action do |global_options, options, args|
-              execution = args[0]
-              help_now!('Specify an execution to get') unless execution
-              response = api(global_options, :get, "executions/#{execution}")
-              print_execs(response)
+              id = args[0]
+              help_now!('Specify an execution id to get') unless id
+              plan_exec = Exec.get(id).show
+              print_execs(plan_exec)
             end
           end
+
           c.arg '<execution_id>'
           c.desc "Get an execution's log"
           c.command :log do |sc|
             sc.action do |global_options, options, args|
-              execution = args[0]
-              help_now!('Specify an execution to get the log from') unless execution
-              response = api(global_options, :get, "executions/#{execution}/log")
-              puts response['log']
+              id = args[0]
+              help_now!('Specify an execution to get the log from') unless id
+              puts Exec.get(id).log
             end
           end
+
           c.arg '<execution_id>'
           c.desc 'Remove an execution, does only work if it\'s not running'
           c.command :remove do |sc|
             sc.action do |global_options, options, args|
-              execution = args[0]
-              help_now!('Specify an execution to remove') unless execution
-              response = api(global_options, :delete, "executions/#{execution}")
-              puts "Removed execution '#{response['id']}'"
-              print_execs(response)
+              id = args[0]
+              help_now!('Specify an execution to remove') unless id
+              Exec.get(id).remove
+              puts "Removed execution '#{@id}'"
             end
           end
+
           c.desc 'Clear executions'
           c.command :clear do |sc|
-            sc.flag [:s, :status], :multiple => true, :desc => 'Remove only executions with this status(es)', :default_value => 'done'
-            sc.flag [:p, :plan], :desc => 'Remove only executions of this plan'
-            sc.flag [:a, :age], :desc => 'Remove only executions created at least <age> seconds ago'
+            sc.flag [:s, :status],
+              :multiple      => true,
+              :desc          => 'Remove only executions with this status(es)',
+              :default_value => 'done'
+            sc.flag [:p, :plan],
+              :desc => 'Remove only executions of this plan'
+            sc.flag [:a, :age],
+              :desc => 'Remove only executions created at least <age> seconds ago'
             sc.action do |global_options, options, args|
-              payload = {statuses: Array(options[:status])}
-              payload.merge!({plan: options[:plan]}) if options[:plan]
-              payload.merge!({age: Integer(options[:age])}) if options[:age]
-              response = api(global_options, :delete, "executions", payload)
+              opts = {}
+              opts[:statuses] = Array(options[:status])
+              opts[:plan]     = options[:plan] if options[:plan]
+              opts[:age]      = Integer(options[:age]) if options[:age]
+              execs = Exec.clear(opts)
               puts "Removed executions:"
-              print_execs(response)
+              print_execs(execs)
             end
           end
+
           command_exec_task(c, :setup,    'Setup a plan (deploy nodes and run steps)')
           command_exec_task(c, :teardown, 'Teardown a plan (Undeploy nodes and reset step state)')
           command_exec_task(c, :deploy,   'Deploy the nodes of a plan')
@@ -84,12 +94,12 @@ module Dopc
         command_exec_undeploy_options(sc) if [:undeploy, :teardown].include?(task)
         DopCommon::Cli.node_select_options(sc)
         sc.action do |global_options, options, args|
-          name = args[0]
+          plan_name = args[0]
+          help_now!("Specify plan to execute #{task}") unless plan_name
           options[:run_for_nodes] = DopCommon::Cli.parse_node_select_options(options).to_h
-          help_now!('Specify a plan name') unless name
-          payload = {plan: name, task: task, run_options: options}
-          response = api(global_options, :post, "executions", payload)
-          puts "Added execution '#{response['id']}'"
+          plan_exec = Exec.add(plan_name, task, options)
+          puts "Added #{task} execution with id '#{plan_exec.id}'"
+          print_execs(plan_exec.show)
         end
       end
     end
