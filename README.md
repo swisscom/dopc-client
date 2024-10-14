@@ -1,3 +1,6 @@
+> [!NOTE]
+> DEPRECATED - no longer maintained!
+
 # DOPc Client
 
 DOPc client is a CLI for the DOPc REST service.
